@@ -1,2 +1,2 @@
-# TrainsMybatis
-MyBatis学习项目
+# TransMybatis
+Mybatis学习项目

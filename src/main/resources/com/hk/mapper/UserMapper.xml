@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hk.mapper.UserMapper">
+    <resultMap id="userMapper" type="com.hk.model.User">
+        <id property="ID" column="ID"/>
+        <result property="userName" column="User_Name"/>
+        <result property="userPassword" column="User_Password"/>
+        <result property="userEmail" column="User_Email"/>
+        <result property="userInfo" column="User_Info"/>
+        <result property="headImg" column="Head_Img"/>
+        <result property="createTime" column="Create_Time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectByID" resultMap="userMapper">
+        SELECT * FROM Sys_User WHERE ID = #{ID}
+    </select>
+
+    <select id="selectAll" resultMap="userMapper">
+        SELECT * FROM Sys_User
+    </select>
+
+    <select id="selectUserCount" resultType="int">
+        SELECT COUNT(ID) FROM Sys_User
+    </select>
+
+    <select id="selectRolesByUserID" resultType="com.hk.model.Role">
+        SELECT
+            r.ID,
+            r.Role_Name RoleName,
+            r.Enabled,
+            r.Create_By CreateBy,
+            r.Create_Time CreateTime
+        FROM Sys_User u
+        INNER JOIN Sys_User_Role ur ON u.ID = ur.User_ID
+        INNER JOIN Sys_Role r ON r.ID = ur.Role_ID
+        WHERE U.ID = #{ID}
+    </select>
+
+
+    <insert id="insertUser">
+        <selectKey resultType="Long" keyProperty="ID" order="BEFORE">
+            SELECT NextVal('SEQ_ID')
+        </selectKey>
+        INSERT INTO Sys_User (
+        ID,User_Name,User_Password,User_Email,
+        User_Info,Head_Img,Create_Time
+        ) VALUES (
+        #{ID},#{userName},#{userPassword},#{userEmail},
+        #{userInfo},#{headImg},#{createTime,jdbcType = TIMESTAMP}
+        )
+    </insert>
+
+
+    <update id="updateBYID">
+        UPDATE SYS_User
+        SET user_Name = #{userName}
+        WHERE ID = #{ID}
+    </update>
+
+
+    <update id="updateBYIDAndPwd">
+        UPDATE SYS_User
+        SET user_Name = #{userName}
+        WHERE ID = #{ID} AND user_Password = #{userPassword}
+    </update>
+
+    <select id="selectDync" resultMap="userMapper">
+        SELECT
+        *
+        FROM SYS_USER
+        <where>
+            <if test="userName != null and userName != ''">
+                AND User_Name = #{userName}
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                AND user_Password = #{userPassword}
+            </if>
+        </where>
+
+    </select>
+
+
+    <update id="updateDync">
+
+        UPDATE Sys_User
+        <set>
+            <if test="userName != null and userName != ''">
+                User_Name = #{userName},
+            </if>
+            <if test="userEmail != null and userEmail != ''">
+                User_Email = #{userEmail},
+            </if>
+            User_Info = #{userInfo},
+        </set>
+        WHERE  ID = #{ID}
+    </update>
+
+</mapper>
