@@ -26,11 +26,11 @@
 
     <select id="selectRolesByUserID" resultType="com.hk.model.Role">
         SELECT
-            r.ID,
-            r.Role_Name RoleName,
-            r.Enabled,
-            r.Create_By CreateBy,
-            r.Create_Time CreateTime
+        r.ID,
+        r.Role_Name RoleName,
+        r.Enabled,
+        r.Create_By CreateBy,
+        r.Create_Time CreateTime
         FROM Sys_User u
         INNER JOIN Sys_User_Role ur ON u.ID = ur.User_ID
         INNER JOIN Sys_Role r ON r.ID = ur.Role_ID
@@ -93,7 +93,41 @@
             </if>
             User_Info = #{userInfo},
         </set>
-        WHERE  ID = #{ID}
+        WHERE ID = #{ID}
     </update>
+
+
+    <select id="selectByIDList" resultMap="userMapper">
+        SELECT * FROM Sys_User WHERE ID IN
+        <foreach collection="array" open="(" close=")" separator="," item="ID" index="i">
+            #{ID}
+        </foreach>
+
+    </select>
+
+    <select id="selectByIDListAndName" resultMap="userMapper">
+        SELECT * FROM Sys_User
+        <where>
+            AND ID IN
+            <foreach collection="IDS" open="(" close=")" separator="," item="ID" index="i">
+                #{ID}
+            </foreach>
+
+            <if test="userName != null and userName != ''">
+                AND user_name = #{userName}
+            </if>
+        </where>
+
+
+    </select>
+
+    <select id="selectByMap" resultMap="userMapper">
+        SELECT * FROM Sys_User
+        WHERE
+        <foreach collection="params" index="key" item="value" separator="AND">
+            ${key} = #{value}
+        </foreach>
+
+    </select>
 
 </mapper>

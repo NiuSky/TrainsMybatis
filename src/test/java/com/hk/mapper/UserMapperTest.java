@@ -7,16 +7,23 @@ import org.apache.logging.log4j.Logger;
 import org.junit.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UserMapperTest extends BaseTest {
 
     private SqlSession sqlSession;
     private Logger logger = LogManager.getLogger();
 
+    private UserMapper userMapper;
     @Before
     public void getSession() {
         if (sqlSession == null) {
             sqlSession = getSqlSessionFactory().openSession();
+        }
+        if(userMapper == null){
+            userMapper = sqlSession.getMapper(UserMapper.class);
         }
     }
 
@@ -108,14 +115,33 @@ public class UserMapperTest extends BaseTest {
 
     @Test
     public void updateDyncTest(){
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
         User user = new User();
         user.setID(3L);
         user.setUserEmail("dujiang@hkjtgc.com");
         user.setUserInfo("测试");
 
         Assert.assertEquals(userMapper.updateDync(user),1);
+    }
 
 
+    @Test
+    public void selectByIDArrayTest(){
+        List<User> users = userMapper.selectByIDList(new Long[]{1L,12L,14L});
+        Assert.assertEquals(users.size(),3);
+    }
+
+    @Test
+    public void selectByIDArrayAndUserNameTest(){
+        List<User> users = userMapper.selectByIDListAndName(new Long[]{1L,12L,14L},"admin");
+        Assert.assertEquals(1,users.size());
+    }
+
+    @Test
+    public void selectByMapTest(){
+        Map<String,Object> params = new HashMap<>();
+        params.put("ID",12L);
+        params.put("User_Name","Do");
+        Assert.assertEquals(1,userMapper.selectByMap(params).size());
     }
 }

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserMapper {
 
@@ -38,4 +39,10 @@ public interface UserMapper {
 
     int updateDync(User user);
 
+
+    List<User> selectByIDList(Long[] IDs);
+    List<User> selectByIDListAndName(@Param("IDS") Long[] IDs,@Param("userName") String userName);
+
+
+    List<User> selectByMap(@Param("params") Map<String,Object> params);
 }
