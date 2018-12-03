@@ -45,4 +45,7 @@ public interface UserMapper {
 
 
     List<User> selectByMap(@Param("params") Map<String,Object> params);
+
+
+    int inserList(@Param("users") List<User> users);
 }

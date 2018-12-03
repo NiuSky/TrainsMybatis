@@ -6,10 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UserMapperTest extends BaseTest {
 
@@ -143,5 +140,20 @@ public class UserMapperTest extends BaseTest {
         params.put("ID",12L);
         params.put("User_Name","Do");
         Assert.assertEquals(1,userMapper.selectByMap(params).size());
+    }
+
+
+    @Test
+    public void insertListTest(){
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            User user = new User();
+            user.setID(Long.valueOf(i+100));
+            user.setUserName("name:"+i);
+            user.setUserPassword("pwd:"+i);
+            user.setUserEmail("Email:"+i);
+            users.add(user);
+        }
+        Assert.assertTrue(userMapper.inserList(users)>0);
     }
 }

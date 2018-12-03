@@ -130,4 +130,20 @@
 
     </select>
 
+
+
+    <update id="inserList">
+        INSERT INTO Sys_User (
+          ID,User_Name,User_Password,User_Email
+        )
+        VALUES
+        <foreach collection="users" item="user" separator=",">
+            (
+              #{user.ID},#{user.userName},#{user.userPassword},#{user.userEmail}
+            )
+        </foreach>
+
+
+    </update>
+
 </mapper>
