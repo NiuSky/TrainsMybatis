@@ -132,7 +132,10 @@
 
 
 
-    <update id="inserList">
+    <insert id="inserList" >
+        <selectKey resultType="Long" keyProperty="ID" order="BEFORE">
+            SELECT NextVal('SEQ_ID')
+        </selectKey>
         INSERT INTO Sys_User (
           ID,User_Name,User_Password,User_Email
         )
@@ -144,6 +147,6 @@
         </foreach>
 
 
-    </update>
+    </insert>
 
 </mapper>

@@ -148,12 +148,14 @@ public class UserMapperTest extends BaseTest {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             User user = new User();
-            user.setID(Long.valueOf(i+100));
+            //user.setID(Long.valueOf(i+100));
             user.setUserName("name:"+i);
             user.setUserPassword("pwd:"+i);
             user.setUserEmail("Email:"+i);
             users.add(user);
         }
         Assert.assertTrue(userMapper.inserList(users)>0);
+
+        sqlSession.commit();
     }
 }
